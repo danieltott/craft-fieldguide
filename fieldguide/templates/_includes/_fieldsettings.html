@@ -1,0 +1,350 @@
+{% import _self as tables %}
+{% macro options(options) %}
+    <strong>Options:</strong><br>
+    <table class="mini-table">
+        <thead>
+            <tr>
+                <th scope="col">Label</th>
+                <th scope="col">Value</th>
+                <th scope="col">Default</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for option in options %}
+            <tr>
+                <td>{{option.label}}</td>
+                <td>{{option.value}}</td>
+                <td>{{(option.default ? 'Yes' : 'No')}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endmacro %}
+{% set settings = field.getAttribute('settings') %}
+{% switch field.type %}
+
+    {% case "RadioButtons" %}
+
+        {{tables.options(settings.options)}}
+
+    {% case "Checkboxes" %}
+        {{tables.options(settings.options)}}
+
+    {% case "Date" %}
+        <table class="mini-table">
+            <tr>
+                <td>Show Date:</td>
+                <td>{{(settings.showDate ? 'Yes' : 'No')}}</td>
+            </tr>
+            <tr>
+                <td>Show Time:</td>
+                <td>{{(settings.showTime ? 'Yes' : 'No')}}</td>
+            </tr>
+            <tr>
+                <td>Minute Increment:</td>
+                <td>{{settings.minuteIncrement}}</td>
+            </tr>
+        </table>
+
+    {% case "Dropdown" %}
+    {{tables.options(settings.options)}}
+
+    {% case "Entries" %}
+        <table class="mini-table">
+            <tr>
+                <td>sources:</td>
+                <td>
+                    {% if settings.sources == '*' %}
+                    all
+                    {% else %}
+                        {% for source in settings.sources %}
+                            {% if source == 'singles' %}
+                                singles{% if not loop.last %},{% endif %}
+                            {% else %}
+                                {% set sourceObj = craft.fieldguide.getSectionBySourceString(source) %}
+                                <a href="#sections_{{sourceObj.handle}}">{{sourceObj.name}}</a>{% if not loop.last %},{% endif %}
+                            {% endif %}
+
+                        {% endfor %}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>limit:</td>
+                <td>{{settings.limit ? settings.limit : '<em class="empty">none</em>'}}</td>
+            </tr>
+            <tr>
+                <td>Selection Label:</td>
+                <td>{{settings.selectionLabel ? settings.selectionLabel : '<em class="empty">none</em>'}}</td>
+            </tr>
+        </table>
+
+    {% case "Lightswitch" %}
+        <table class="mini-table">
+            <tr>
+                <td>Default:</td>
+                <td>{{settings.default ? 'On' : 'Off'}}</td>
+            </tr>
+        </table>
+
+    {% case "Matrix" %}
+        <table class="mini-table">
+            <tr>
+                <td>Max Blocks:</td>
+                <td>{{settings.maxBlocks ? settings.maxBlocks : '<em class="empty">none</em>'}}</td>
+            </tr>
+        </table>
+
+    {% case "MultiSelect" %}
+        {{tables.options(settings.options)}}
+
+    {% case "Number" %}
+        <table class="mini-table">
+            <tr>
+                <td>Min:</td>
+                <td>{{settings.min}}</td>
+            </tr>
+            <tr>
+                <td>Max:</td>
+                <td>{{settings.max == '' ? '<em class="empty">none</em>' : settings.max}}</td>
+            </tr>
+            <tr>
+                <td>Decimals:</td>
+                <td>{{settings.decimals == '' ? '<em class="empty">none</em>' : settings.decimals}}</td>
+            </tr>
+        </table>
+
+    {% case "PositionSelect" %}
+        <table class="mini-table">
+            <tr>
+                <td>Selected Options:</td>
+                <td>
+                    {% for option in settings.options %}
+                        <span data-icon="pos{{option|replace({'-': ''})}}"></span> {{option}}{% if not loop.last %},{% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+        </table>
+
+
+    {% case "RichText" %}
+
+        <table class="mini-table">
+            <tr>
+                <td>Config File:</td>
+                <td>{{settings.configFile}}</td>
+            </tr>
+            {% if settings.cleanupHtml is defined %}
+            <tr>
+                <td>Clean Up HTML:</td>
+                <td>{{settings.cleanupHtml ? 'yes' : 'no'}}</td>
+            </tr>
+            {% endif %}
+            {% if settings.purifyHtml is defined %}
+            <tr>
+                <td>Purify HTML:</td>
+                <td>{{settings.purifyHtml ? 'yes' : 'no'}}</td>
+            </tr>
+            {% endif %}
+            <tr>
+                <td>Column Type:</td>
+                <td>{{settings.columnType}}</td>
+            </tr>
+        </table>
+
+
+    {% case "Table" %}
+
+        <strong>Columns:</strong><br>
+        <table class="mini-table">
+            <thead>
+                <tr>
+                    <th scope="col">Heading</th>
+                    <th scope="col">Handle</th>
+                    <th scope="col">Width</th>
+                    <th scope="col">Type</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for column in settings.columns %}
+                <tr>
+                    <td>{{column.heading}}</td>
+                    <td>{{column.handle}}</td>
+                    <td>{{column.width}}</td>
+                    <td>{{column.type}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+
+
+        <strong>Defaults:</strong><br>
+        <table class="mini-table">
+            <thead>
+                <tr>
+                    {% for column in settings.columns %}
+                        <th scope="col">{{column.heading}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+            {% for row in settings.defaults %}
+                <tr>
+                {% for col in row %}
+                    <td>{{col|nl2br}}</td>
+                {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+
+    {% case "Users" %}
+        <table class="mini-table">
+            <tr>
+                <td>User Groups:</td>
+                <td>
+                    {% if settings.sources == '*' %}
+                    all
+                    {% else %}
+                    {# {{dump(settings.sources)}} #}
+                        {% for group in settings.sources %}
+
+                            {% set sourceObj = craft.fieldguide.getUserGroupBySourceString(group) %}
+                            <a href="#userGroups_{{sourceObj.handle}}">{{sourceObj.name}}</a>{% if not loop.last %},{% endif %}
+
+                        {% endfor %}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>Limit:</td>
+                <td>{{settings.limit ? settings.limit : '<em class="empty">none</em>'}}</td>
+            </tr>
+            <tr>
+                <td>Selection Label:</td>
+                <td>{{settings.selectionLabel ? settings.selectionLabel : '<em class="empty">none</em>'}}</td>
+            </tr>
+        </table>
+
+
+    {# {{dump(settings)}} #}
+
+
+    {% case "PlainText" %}
+        <table class="mini-table">
+            <tr>
+                <td>placeholder:</td>
+                <td>{{settings.placeholder ? settings.placeholder : '<em class="empty">none</em>'}}</td>
+            </tr>
+            <tr>
+                <td>maxLength:</td>
+                <td>{{settings.maxLength ? settings.maxLength : '<em class="empty">none</em>'}}</td>
+            </tr>
+            <tr>
+                <td>multiline:</td>
+                <td>{{settings.multiline ? settings.multiline : '<em class="empty">none</em>'}}</td>
+            </tr>
+            <tr>
+                <td>initialRows:</td>
+                <td>{{settings.initialRows ? settings.initialRows : '<em class="empty">none</em>'}}</td>
+            </tr>
+        </table>
+
+    {% case "Categories" %}
+        <table class="mini-table">
+            <tr>
+                <td>source:</td>
+                {% set cagetoryGroup = craft.fieldguide.getCategoryGroupBySourceString(settings.source) %}
+                <td><a href="#categoryGroups_{{cagetoryGroup.handle}}">{{cagetoryGroup.name}}</a></td>
+            </tr>
+            <tr>
+                <td>limit:</td>
+                <td>{{settings.limit ? settings.limit : '<em class="empty">none</em>'}}</td>
+            </tr>
+            <tr>
+                <td>Selection Label:</td>
+                <td>{{settings.selectionLabel ? settings.selectionLabel : '<em class="empty">none</em>'}}</td>
+            </tr>
+        </table>
+
+    {% case "Assets" %}
+        {# <pre>{{dump(settings)}}</pre> #}
+        <table class="mini-table">
+            <tr>
+                <td>sources:</td>
+                <td>
+                    {% if settings.sources == '*' %}
+                    all
+                    {% else %}
+                        {% for source in settings.sources %}
+
+                            {% set sourceObj = craft.fieldguide.getAssetFolderBySourceString(source) %}
+                            <a href="#assetSources_{{sourceObj.handle}}">{{sourceObj.name}}</a>{% if not loop.last %},{% endif %}
+
+                        {% endfor %}
+
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>Restrict to Single Folder:</td>
+                <td>{{settings.useSingleFolder ? 'yes' : 'no'}}</td>
+            </tr>
+            {% if settings.useSingleFolder %}
+                <tr>
+                    <td>Location Source:</td>
+                    <td>
+
+                        {% set sourceObj = craft.fieldguide.getAssetFolderBySourceString(settings.singleUploadLocationSource) %}
+                        <a href="#assetSources_{{sourceObj.handle}}">{{sourceObj.name}}</a>{% if not loop.last %},{% endif %}
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>Location Subpath:</td>
+                    <td>{{settings.singleUploadLocationSubpath ? settings.singleUploadLocationSubpath : '<em class="empty">none</em>'}}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td>Default Location Source:</td>
+                    <td>
+
+                        {% set sourceObj = craft.fieldguide.getAssetFolderBySourceString(settings.defaultUploadLocationSource) %}
+                        <a href="#assetSources_{{sourceObj.handle}}">{{sourceObj.name}}</a>{% if not loop.last %},{% endif %}
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>Default Location Subpath:</td>
+                    <td>{{settings.defaultUploadLocationSubpath ? settings.defaultUploadLocationSubpath : '<em class="empty">none</em>'}}</td>
+                </tr>
+            {% endif %}
+            <tr>
+                <td>Restrict File Types:</td>
+                <td>
+                {% if settings.restrictFiles == '' %}
+                    no
+                {% else %}
+                    {% for kind in settings.allowedKinds %}
+                        {{kind}}{% if not loop.last %},{% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                </td>
+            </tr>
+            <tr>
+                <td>limit:</td>
+                <td>{{settings.limit ? settings.limit : '<em class="empty">none</em>'}}</td>
+            </tr>
+            <tr>
+                <td>Selection Label:</td>
+                <td>{{settings.selectionLabel ? settings.selectionLabel : '<em class="empty">none</em>'}}</td>
+            </tr>
+        </table>
+
+    {% default %}
+
+
+{% endswitch %}

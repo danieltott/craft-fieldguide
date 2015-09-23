@@ -1,0 +1,50 @@
+<table class="field-table">
+    <thead>
+        <th scope="col">Name</th>
+        <th scope="col">Handle</th>
+        <th scope="col">Type</th>
+        <th scope="col" class="cell-settings">Settings</th>
+        <th scope="col">Instructions</th>
+    </thead>
+    <tbody>
+
+        {% for field in fields %}
+            <tr>
+                <td><a href="{{adminUrl}}/settings/fields/edit/{{ field.id }}">{{ field.name }}</a></td>
+                <td><code>{{ field.handle }}</code></td>
+                <td>{{ field.type }}</td>
+                <td class="cell-settings">
+                {{ include('fieldguide/_includes/_fieldsettings', {'field': field})}}
+                </td>
+                <td>{{field.instructions | markdown}}</td>
+            </tr>
+
+
+
+            {% if field.type == "Matrix" %}
+                {% set blockTypes = craft.fieldguide.getBlockTypes(field.id) %}
+                {% for blockType in blockTypes %}
+                    <tr class="sub-fields">
+                        <td>{{ blockType.name }}</td>
+                        <td><code>{{ blockType.handle }}</code></td>
+                        <td>Matrix Block Type</td>
+                        <td class="cell-settings"></td>
+                        <td></td>
+                    </tr>
+                    {% for subField in blockType.fields %}
+                        <tr class="sub-sub-fields">
+                            <td>{{ subField.name }}</td>
+                            <td><code>{{ subField.handle }}</code></td>
+                            <td>{{ subField.type }}</td>
+                            <td class="cell-settings">{{ include('fieldguide/_includes/_fieldsettings', {'field': subField})}}</td>
+                            <td>{{subField.instructions | markdown}}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+
+            {% endif %}
+
+
+        {% endfor %}
+    </tbody>
+</table>

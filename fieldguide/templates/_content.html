@@ -1,101 +1,139 @@
 {% set adminUrl = craft.config.baseCpUrl ~ '/' ~ craft.config.cpTrigger %}
+
+{# Load Category Groups #}
+{% set categoryGroups = craft.fieldguide.getCategoryGroups() %}
+<h2>Category Groups</h2>
+
+{% for key,group in categoryGroups %}
+    <div class="section" id="categoryGroups_{{group.handle}}">
+    	<h3>{{group.name}} <a href="{{adminUrl}}/settings/categories/{{key}}" class="handle">{{ group.handle }}</a></h3>
+    	<h4>Field Layout:</h4>
+    	{% set layout = craft.fieldguide.getFieldLayoutById(group.fieldLayoutId) %}
+		{% set fields_objs = layout.getFields() %}
+		{% set fields = [] %}
+		{% for field_obj in fields_objs %}
+        	{% set field_id =  field_obj.fieldId %}
+        	{% set field = field_obj.getField(field_id) %}
+        	{% set fields = fields|merge([field]) %}
+        {% endfor %}
+		{{ include('fieldguide/_includes/_fieldtable', {'fields': fields})}}
+    </div>
+
+{% endfor %}
+
+<hr>
+
+{# Load User Groups #}
+{% set userGroups = craft.fieldguide.getUserGroups() %}
+<h2>User Groups</h2>
+
+
+{% for key,group in userGroups %}
+    <div class="section" id="userGroups_{{group.handle}}">
+    	<h3>{{group.name}} <a href="{{adminUrl}}/settings/users/groups/{{key}}" class="handle">{{ group.handle }}</a></h3>
+    </div>
+{% endfor %}
+
+	<div class="section">
+    	<h3>User Field Layout:</h3>
+    	<h4>Field Layout <a href="{{adminUrl}}/settings/users/fields">(for all users/groups)</a>:</h4>
+    	{% set layout = craft.fieldguide.getUserFieldGroup() %}
+		{% set fields_objs = layout.getFields() %}
+		{% set fields = [] %}
+		{% for field_obj in fields_objs %}
+        	{% set field_id =  field_obj.fieldId %}
+        	{% set field = field_obj.getField(field_id) %}
+        	{% set fields = fields|merge([field]) %}
+        {% endfor %}
+		{{ include('fieldguide/_includes/_fieldtable', {'fields': fields})}}
+    </div>
+
+<hr>
+
+{# Load Asset Sources #}
+{% set assetSources = craft.fieldguide.getAllAssetSources() %}
+<h2>Asset Sources</h2>
+
+
+{% for key,group in assetSources %}
+    <div class="section" id="assetSources_{{group.handle}}">
+    	<h3>{{group.name}} <a href="{{adminUrl}}/settings/categories/{{key}}" class="handle">{{ group.handle }}</a></h3>
+    	<h4>Field Layout:</h4>
+    	{% set layout = craft.fieldguide.getFieldLayoutById(group.fieldLayoutId) %}
+		{% set fields_objs = layout.getFields() %}
+		{% set fields = [] %}
+		{% for field_obj in fields_objs %}
+        	{% set field_id =  field_obj.fieldId %}
+        	{% set field = field_obj.getField(field_id) %}
+        	{% set fields = fields|merge([field]) %}
+        {% endfor %}
+		{{ include('fieldguide/_includes/_fieldtable', {'fields': fields})}}
+    </div>
+{% endfor %}
+
+
+
+<hr>
+
+{# Load Globals #}
+{% set globalSets = craft.fieldguide.getAllGlobalSets() %}
+<h2>Global Sets</h2>
+
+
+{% for key,group in globalSets %}
+    <div class="section" id="assetSources_{{group.handle}}">
+    	<h3>{{group.name}} <a href="{{adminUrl}}/settings/categories/{{key}}" class="handle">{{ group.handle }}</a></h3>
+    	<h4>Field Layout:</h4>
+    	{% set layout = craft.fieldguide.getFieldLayoutById(group.fieldLayoutId) %}
+		{% set fields_objs = layout.getFields() %}
+		{% set fields = [] %}
+		{% for field_obj in fields_objs %}
+        	{% set field_id =  field_obj.fieldId %}
+        	{% set field = field_obj.getField(field_id) %}
+        	{% set fields = fields|merge([field]) %}
+        {% endfor %}
+		{{ include('fieldguide/_includes/_fieldtable', {'fields': fields})}}
+    </div>
+{% endfor %}
+
+
+
+<hr>
+
+{# Load Sections #}
 {% set sections = craft.sections.getAllSections() %}
+<h2>Sections</h2>
 {% for section in sections %}
 	<div class="section">
-		<h2 class="section-name">{{ section.name }} <a href="{{adminUrl}}/settings/sections/{{section.id}}" class="handle">{{ section.handle }}</a></h2>
+		<h3>{{ section.name }} <a href="{{adminUrl}}/settings/sections/{{section.id}}" class="handle">{{ section.handle }}</a></h3>
 		{% set entry_types = section.entryTypes %}
 		<ul class="entry-types">
 			{% for entry_type in entry_types %}
 				<li class="entry-type-group">
 					<h4 class="entry-type">Entry Type: <a href="{{adminUrl}}/settings/sections/{{section.id}}/entrytypes/{{entry_type.id}}">{{entry_type}}</a></h4>
-					{% set fields = entry_type.getFieldLayout(entry_type).getFields() %}
-					<table class="field-table">
-						<thead>
-							<th scope="col">Name</th>
-							<th scope="col">Handle</th>
-							<th scope="col">Type</th>
-							<th scope="col">Instructions</th>
-						</thead>
-						<tbody>
-							{% for field_obj in fields %}
-								{% set field_id =  field_obj.fieldId %}
-								{% set field = field_obj.getField(field_id) %}
-								<tr>
-									<td><a href="{{adminUrl}}/settings/fields/edit/{{ field.id }}">{{ field.name }}</a></td>
-									<td><code>{{ field.handle }}</code></td>
-									<td>{{ field.type }}</td>
-									<td>{{field.instructions | markdown}}</td>
-								</tr>
-								{% if field.type == "Matrix" %}
-									{% set blockTypes = craft.fieldguide.getBlockTypes(field.id) %}
-									{% for blockType in blockTypes %}
-										<tr class="sub-fields">
-											<td>{{ blockType.name }}</td>
-											<td><code>{{ blockType.handle }}</code></td>
-											<td>Matrix Block Type</td>
-											<td></td>
-										</tr>
-										{% for subField in blockType.fields %}
-											<tr class="sub-sub-fields">
-												<td>{{ subField.name }}</td>
-												<td><code>{{ subField.handle }}</code></td>
-												<td>{{ subField.type }}</td>
-												<td>{{subField.instructions | markdown}}</td>
-											</tr>
-										{% endfor %}
-									{% endfor %}
-								{% endif %}
-							{% endfor %}
-						</tbody>
-					</table>
+					{% set fields_objs = entry_type.getFieldLayout(entry_type).getFields() %}
+					{% set fields = [] %}
+					{% for field_obj in fields_objs %}
+		            	{% set field_id =  field_obj.fieldId %}
+		            	{% set field = field_obj.getField(field_id) %}
+		            	{% set fields = fields|merge([field]) %}
+		            {% endfor %}
+					{{ include('fieldguide/_includes/_fieldtable', {'fields': fields})}}
 				</li>
 			{% endfor %}
 		</ul>
 	</div>
 {% endfor %}
+
+<hr>
+
 <div class="section">
-	<h2 class="section-name">{{ "Unused Fields"|t }}</h2>
+	<h2>{{ "Unused Fields"|t }}</h2>
 	<h4 class="entry-type">Fields not used on any Field Layout (including EntryTypes, Users, CategoryGroups, TagGroups, AssetSources, MatrixBlocks, or GlobalSets)</h4>
-	<table class="field-table">
-		<thead>
-			<th scope="col">Name</th>
-			<th scope="col">Handle</th>
-			<th scope="col">Type</th>
-			<th scope="col">Instructions</th>
-		</thead>
-		<tbody>
-			{% set fields = [] %}
-			{% set unusedFieldIds = craft.fieldguide.unusedFieldIds %}
-			{% for fieldId in unusedFieldIds %}
-				{% set fields = fields|merge([craft.fields.getFieldById(fieldId)]) %}
-			{% endfor %}
-			{% for field in fields %}
-				<tr>
-					<td><a href="{{adminUrl}}/settings/fields/edit/{{ field.id }}">{{ field.name }}</a></td>
-					<td><code>{{ field.handle }}</code></td>
-					<td>{{ field.type }}</td>
-					<td>{{field.instructions | markdown}}</td>
-				</tr>
-				{% if field.type == "Matrix" %}
-					{% set blockTypes = craft.fieldguide.getBlockTypes(field.id) %}
-					{% for blockType in blockTypes %}
-						<tr class="sub-fields">
-							<td>{{ blockType.name }}</td>
-							<td><code>{{ blockType.handle }}</code></td>
-							<td>Matrix Block Type</td>
-							<td></td>
-						</tr>
-						{% for subField in blockType.fields %}
-							<tr class="sub-sub-fields">
-								<td>{{ subField.name }}</td>
-								<td><code>{{ subField.handle }}</code></td>
-								<td>{{ subField.type }}</td>
-								<td>{{subField.instructions | markdown}}</td>
-							</tr>
-						{% endfor %}
-					{% endfor %}
-				{% endif %}
-			{% endfor %}
-		</tbody>
-	</table>
+	{% set fields = [] %}
+	{% set unusedFieldIds = craft.fieldguide.unusedFieldIds %}
+	{% for fieldId in unusedFieldIds %}
+		{% set fields = fields|merge([craft.fields.getFieldById(fieldId)]) %}
+	{% endfor %}
+	{{ include('fieldguide/_includes/_fieldtable', {'fields': fields})}}
 </div>

@@ -1,20 +1,13 @@
-code {font:monospace;}
+.fieldguide code {font:monospace;}
 
+.fieldguide h2 {font-size: 23px;}
 
-.section {
-    margin-bottom:20px;
+.fieldguide h3 {font-size:20px; font-weight:normal; margin: 0 0 15px 0;}
+.fieldguide .handle {font-size:13px; font-weight:normal;}
 
-}
-.section-name {
-    font-size:20px;
-    font-weight:normal;
-    margin: 0 0 15px 0;
-}
-.section-name .handle {
-    font-size:13px;
-    font-weight:normal;
-}
+.fieldguide .section {margin-bottom:20px; }
 
+.fieldguide hr {margin-top: 60px; margin-bottom: 60px;}
 
 .entry-type-group 	{margin:0 0 20px 0;}
 .entry-type 		{font-weight:normal; margin: 0;}
@@ -27,9 +20,16 @@ table.field-table { margin-bottom:25px; background:#eee; width:100%; table-layou
 
 .field-table th {background:#eee; font-weight:bold; color:#000; background:#fff;}
 
+.field-table .cell-settings {width: 40%;}
 
-.field-table tr.sub-fields {background:#e5e5e5;}
+.field-table tr.sub-fields {background:#fdfdfd;}
 .field-table tr.sub-fields td:first-child {padding-left:2em;}
 
-.field-table tr.sub-sub-fields {background:#e5e5e5;}
+.field-table tr.sub-sub-fields {background:#fdfdfd;}
 .field-table tr.sub-sub-fields td:first-child {padding-left:4em;}
+
+.field-table .sub-fields td, .field-table .sub-fields th, .field-table .sub-sub-fields td, .field-table .sub-sub-fields th { border-bottom: 1px solid #dfdfdf; }
+
+.field-table .mini-table th, .field-table .mini-table td {min-width: 0 !important; padding: 5px 8px !important; background: transparent !important; }
+
+.field-table .mini-table tr:last-child td {border-bottom: 0 !important;}
