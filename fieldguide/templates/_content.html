@@ -39,7 +39,7 @@
     	<h3>{{group.name}} <a href="{{adminUrl}}/settings/categories/{{key}}" class="handle">{{ group.handle }}</a></h3>
     	<h4>Field Layout:</h4>
         <div class="fieldguide-control">
-            <label>Show Settings: <input type="checkbox" data-showsettings="section_category_{{group.id}}"></label>
+            <label>Show Settings: <input type="checkbox" data-showsettings="section_category_{{key}}"></label>
         </div>
     	{% set layout = craft.fieldguide.getFieldLayoutById(group.fieldLayoutId) %}
 		{% set fields_objs = layout.getFields() %}
