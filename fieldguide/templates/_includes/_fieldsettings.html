@@ -1,3 +1,5 @@
+
+<h5>Settings:</h5>
 {% import _self as tables %}
 {% macro options(options) %}
     <strong>Options:</strong><br>
@@ -132,7 +134,7 @@
         <table class="mini-table">
             <tr>
                 <td>Config File:</td>
-                <td>{{settings.configFile}}</td>
+                <td>{{settings.configFile == '' ? '<em class="empty">none</em>' : settings.configFile}}</td>
             </tr>
             {% if settings.cleanupHtml is defined %}
             <tr>
@@ -298,7 +300,7 @@
                     <td>
 
                         {% set sourceObj = craft.fieldguide.getAssetFolderBySourceString(settings.singleUploadLocationSource) %}
-                        <a href="#assetSources_{{sourceObj.handle}}">{{sourceObj.name}}</a>{% if not loop.last %},{% endif %}
+                        <a href="#assetSources_{{sourceObj.handle}}">{{sourceObj.name}}</a>
 
                     </td>
                 </tr>
@@ -312,7 +314,7 @@
                     <td>
 
                         {% set sourceObj = craft.fieldguide.getAssetFolderBySourceString(settings.defaultUploadLocationSource) %}
-                        <a href="#assetSources_{{sourceObj.handle}}">{{sourceObj.name}}</a>{% if not loop.last %},{% endif %}
+                        <a href="#assetSources_{{sourceObj.handle}}">{{sourceObj.name}}</a>
 
                     </td>
                 </tr>

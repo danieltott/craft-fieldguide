@@ -1,22 +1,25 @@
+{% if fields|length %}
+
 <table class="field-table">
     <thead>
         <th scope="col">Name</th>
         <th scope="col">Handle</th>
         <th scope="col">Type</th>
-        <th scope="col" class="cell-settings">Settings</th>
-        <th scope="col">Instructions</th>
+        <th scope="col" class="cell-larger">Instructions</th>
     </thead>
     <tbody>
 
         {% for field in fields %}
-            <tr>
+            <tr class="primary-fields">
                 <td><a href="{{adminUrl}}/settings/fields/edit/{{ field.id }}">{{ field.name }}</a></td>
                 <td><code>{{ field.handle }}</code></td>
                 <td>{{ field.type }}</td>
-                <td class="cell-settings">
-                {{ include('fieldguide/_includes/_fieldsettings', {'field': field})}}
+                <td class="cell-larger">{{field.instructions | markdown}}</td>
+            </tr>
+            <tr class="fieldguide-settings">
+                <td colspan="4">
+                    {{ include('fieldguide/_includes/_fieldsettings', {'field': field})}}
                 </td>
-                <td>{{field.instructions | markdown}}</td>
             </tr>
 
 
@@ -28,16 +31,19 @@
                         <td>{{ blockType.name }}</td>
                         <td><code>{{ blockType.handle }}</code></td>
                         <td>Matrix Block Type</td>
-                        <td class="cell-settings"></td>
-                        <td></td>
+                        <td class="cell-larger"></td>
                     </tr>
                     {% for subField in blockType.fields %}
-                        <tr class="sub-sub-fields">
+                        <tr class="sub-sub-fields primary-fields">
                             <td>{{ subField.name }}</td>
                             <td><code>{{ subField.handle }}</code></td>
                             <td>{{ subField.type }}</td>
-                            <td class="cell-settings">{{ include('fieldguide/_includes/_fieldsettings', {'field': subField})}}</td>
-                            <td>{{subField.instructions | markdown}}</td>
+                            <td class="cell-larger">{{subField.instructions | markdown}}</td>
+                        </tr>
+                        <tr class="sub-sub-fields fieldguide-settings">
+                            <td colspan="4">
+                                {{ include('fieldguide/_includes/_fieldsettings', {'field': subField})}}
+                            </td>
                         </tr>
                     {% endfor %}
                 {% endfor %}
@@ -48,3 +54,8 @@
         {% endfor %}
     </tbody>
 </table>
+
+{% else %}
+    <div class="empty-block">no fields set</div>
+
+{% endif %}

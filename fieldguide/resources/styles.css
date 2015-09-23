@@ -3,6 +3,8 @@
 .fieldguide h2 {font-size: 23px;}
 
 .fieldguide h3 {font-size:20px; font-weight:normal; margin: 0 0 15px 0;}
+.fieldguide h4 {margin-bottom: 0;}
+.fieldguide .empty-block{color:#999; font-style: italic; margin-bottom: 1em;}
 .fieldguide .handle {font-size:13px; font-weight:normal;}
 
 .fieldguide .section {margin-bottom:20px; }
@@ -20,16 +22,24 @@ table.field-table { margin-bottom:25px; background:#eee; width:100%; table-layou
 
 .field-table th {background:#eee; font-weight:bold; color:#000; background:#fff;}
 
-.field-table .cell-settings {width: 40%;}
+/*.field-table .cell-larger {width: auto;}*/
 
 .field-table tr.sub-fields {background:#fdfdfd;}
-.field-table tr.sub-fields td:first-child {padding-left:2em;}
+.field-table tr.sub-fields td {padding-left:2em;}
 
 .field-table tr.sub-sub-fields {background:#fdfdfd;}
-.field-table tr.sub-sub-fields td:first-child {padding-left:4em;}
+.field-table tr.sub-sub-fields td {padding-left:4em;}
 
 .field-table .sub-fields td, .field-table .sub-fields th, .field-table .sub-sub-fields td, .field-table .sub-sub-fields th { border-bottom: 1px solid #dfdfdf; }
 
 .field-table .mini-table th, .field-table .mini-table td {min-width: 0 !important; padding: 5px 8px !important; background: transparent !important; }
 
 .field-table .mini-table tr:last-child td {border-bottom: 0 !important;}
+
+.fieldguide-settings {display: none;}
+
+.fieldguide-show-settings .fieldguide-settings{display: table-row;}
+.fieldguide-settings td {padding:0 0 30px 30px;}
+.field-table .sub-sub-fields.fieldguide-settings td {padding-left: 80px;}
+.fieldguide-show-settings .field-table .primary-fields td {border-bottom: 0; }
+.fieldguide-control { color:#aaa; font-size: .8em;}

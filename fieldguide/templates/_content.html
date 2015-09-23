@@ -1,5 +1,35 @@
 {% set adminUrl = craft.config.baseCpUrl ~ '/' ~ craft.config.cpTrigger %}
 
+{# Load Sections #}
+{% set sections = craft.sections.getAllSections() %}
+<h2>Sections</h2>
+{% for section in sections %}
+    <div class="section">
+        <h3>{{ section.name }} <a href="{{adminUrl}}/settings/sections/{{section.id}}" class="handle">{{ section.handle }}</a></h3>
+        {% set entry_types = section.entryTypes %}
+        <ul class="entry-types">
+            {% for entry_type in entry_types %}
+                <li class="entry-type-group">
+                    <h4 class="entry-type">Entry Type: <a href="{{adminUrl}}/settings/sections/{{section.id}}/entrytypes/{{entry_type.id}}">{{entry_type}}</a></h4>
+                    <div class="fieldguide-control">
+                        <label>Show Settings: <input type="checkbox" data-showsettings="section_entrytype_{{entry_type.id}}"></label>
+                    </div>
+                    {% set fields_objs = entry_type.getFieldLayout(entry_type).getFields() %}
+                    {% set fields = [] %}
+                    {% for field_obj in fields_objs %}
+                        {% set field_id =  field_obj.fieldId %}
+                        {% set field = field_obj.getField(field_id) %}
+                        {% set fields = fields|merge([field]) %}
+                    {% endfor %}
+                    {{ include('fieldguide/_includes/_fieldtable', {'fields': fields})}}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endfor %}
+
+<hr>
+
 {# Load Category Groups #}
 {% set categoryGroups = craft.fieldguide.getCategoryGroups() %}
 <h2>Category Groups</h2>
@@ -8,6 +38,9 @@
     <div class="section" id="categoryGroups_{{group.handle}}">
     	<h3>{{group.name}} <a href="{{adminUrl}}/settings/categories/{{key}}" class="handle">{{ group.handle }}</a></h3>
     	<h4>Field Layout:</h4>
+        <div class="fieldguide-control">
+            <label>Show Settings: <input type="checkbox" data-showsettings="section_category_{{group.id}}"></label>
+        </div>
     	{% set layout = craft.fieldguide.getFieldLayoutById(group.fieldLayoutId) %}
 		{% set fields_objs = layout.getFields() %}
 		{% set fields = [] %}
@@ -18,7 +51,8 @@
         {% endfor %}
 		{{ include('fieldguide/_includes/_fieldtable', {'fields': fields})}}
     </div>
-
+{% else %}
+    <div class="empty-block">none</div>
 {% endfor %}
 
 <hr>
@@ -32,6 +66,8 @@
     <div class="section" id="userGroups_{{group.handle}}">
     	<h3>{{group.name}} <a href="{{adminUrl}}/settings/users/groups/{{key}}" class="handle">{{ group.handle }}</a></h3>
     </div>
+{% else %}
+    <div class="empty-block">no user groups</div>
 {% endfor %}
 
 	<div class="section">
@@ -45,6 +81,11 @@
         	{% set field = field_obj.getField(field_id) %}
         	{% set fields = fields|merge([field]) %}
         {% endfor %}
+        {% if fields|length %}
+        <div class="fieldguide-control">
+            <label>Show Settings: <input type="checkbox" data-showsettings="section_userfields"></label>
+        </div>
+        {% endif %}
 		{{ include('fieldguide/_includes/_fieldtable', {'fields': fields})}}
     </div>
 
@@ -57,8 +98,7 @@
 
 {% for key,group in assetSources %}
     <div class="section" id="assetSources_{{group.handle}}">
-    	<h3>{{group.name}} <a href="{{adminUrl}}/settings/categories/{{key}}" class="handle">{{ group.handle }}</a></h3>
-    	<h4>Field Layout:</h4>
+    	<h3>{{group.name}} <a href="{{adminUrl}}/settings/assets/sources/{{key}}" class="handle">{{ group.handle }}</a></h3>
     	{% set layout = craft.fieldguide.getFieldLayoutById(group.fieldLayoutId) %}
 		{% set fields_objs = layout.getFields() %}
 		{% set fields = [] %}
@@ -67,6 +107,12 @@
         	{% set field = field_obj.getField(field_id) %}
         	{% set fields = fields|merge([field]) %}
         {% endfor %}
+        {% if fields|length %}
+            <h4>Field Layout:</h4>
+            <div class="fieldguide-control">
+                <label>Show Settings: <input type="checkbox" data-showsettings="section_assets_{{key}}"></label>
+            </div>
+        {% endif %}
 		{{ include('fieldguide/_includes/_fieldtable', {'fields': fields})}}
     </div>
 {% endfor %}
@@ -83,7 +129,6 @@
 {% for key,group in globalSets %}
     <div class="section" id="assetSources_{{group.handle}}">
     	<h3>{{group.name}} <a href="{{adminUrl}}/settings/categories/{{key}}" class="handle">{{ group.handle }}</a></h3>
-    	<h4>Field Layout:</h4>
     	{% set layout = craft.fieldguide.getFieldLayoutById(group.fieldLayoutId) %}
 		{% set fields_objs = layout.getFields() %}
 		{% set fields = [] %}
@@ -92,6 +137,12 @@
         	{% set field = field_obj.getField(field_id) %}
         	{% set fields = fields|merge([field]) %}
         {% endfor %}
+        {% if fields|length %}
+            <h4>Field Layout:</h4>
+            <div class="fieldguide-control">
+                <label>Show Settings: <input type="checkbox" data-showsettings="section_globals_{{key}}"></label>
+            </div>
+        {% endif %}
 		{{ include('fieldguide/_includes/_fieldtable', {'fields': fields})}}
     </div>
 {% endfor %}
@@ -100,36 +151,14 @@
 
 <hr>
 
-{# Load Sections #}
-{% set sections = craft.sections.getAllSections() %}
-<h2>Sections</h2>
-{% for section in sections %}
-	<div class="section">
-		<h3>{{ section.name }} <a href="{{adminUrl}}/settings/sections/{{section.id}}" class="handle">{{ section.handle }}</a></h3>
-		{% set entry_types = section.entryTypes %}
-		<ul class="entry-types">
-			{% for entry_type in entry_types %}
-				<li class="entry-type-group">
-					<h4 class="entry-type">Entry Type: <a href="{{adminUrl}}/settings/sections/{{section.id}}/entrytypes/{{entry_type.id}}">{{entry_type}}</a></h4>
-					{% set fields_objs = entry_type.getFieldLayout(entry_type).getFields() %}
-					{% set fields = [] %}
-					{% for field_obj in fields_objs %}
-		            	{% set field_id =  field_obj.fieldId %}
-		            	{% set field = field_obj.getField(field_id) %}
-		            	{% set fields = fields|merge([field]) %}
-		            {% endfor %}
-					{{ include('fieldguide/_includes/_fieldtable', {'fields': fields})}}
-				</li>
-			{% endfor %}
-		</ul>
-	</div>
-{% endfor %}
 
-<hr>
 
 <div class="section">
 	<h2>{{ "Unused Fields"|t }}</h2>
 	<h4 class="entry-type">Fields not used on any Field Layout (including EntryTypes, Users, CategoryGroups, TagGroups, AssetSources, MatrixBlocks, or GlobalSets)</h4>
+    <div class="fieldguide-control">
+        <label>Show Settings: <input type="checkbox" data-showsettings="section_unusedfields"></label>
+    </div>
 	{% set fields = [] %}
 	{% set unusedFieldIds = craft.fieldguide.unusedFieldIds %}
 	{% for fieldId in unusedFieldIds %}
