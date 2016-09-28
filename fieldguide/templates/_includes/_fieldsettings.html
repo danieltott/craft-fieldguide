@@ -73,11 +73,11 @@
             </tr>
             <tr>
                 <td>limit:</td>
-                <td>{{settings.limit ? settings.limit : '<em class="empty">none</em>'}}</td>
+                <td>{{(settings.limit ? settings.limit : '<em class="empty">none</em>')|raw}}</td>
             </tr>
             <tr>
                 <td>Selection Label:</td>
-                <td>{{settings.selectionLabel ? settings.selectionLabel : '<em class="empty">none</em>'}}</td>
+                <td>{{(settings.selectionLabel ? settings.selectionLabel : '<em class="empty">none</em>')|raw}}</td>
             </tr>
         </table>
 
@@ -93,7 +93,7 @@
         <table class="mini-table">
             <tr>
                 <td>Max Blocks:</td>
-                <td>{{settings.maxBlocks ? settings.maxBlocks : '<em class="empty">none</em>'}}</td>
+                <td>{{(settings.maxBlocks ? settings.maxBlocks : '<em class="empty">none</em>')|raw}}</td>
             </tr>
         </table>
 
@@ -108,11 +108,11 @@
             </tr>
             <tr>
                 <td>Max:</td>
-                <td>{{settings.max == '' ? '<em class="empty">none</em>' : settings.max}}</td>
+                <td>{{(settings.max == '' ? '<em class="empty">none</em>' : settings.max)|raw}}</td>
             </tr>
             <tr>
                 <td>Decimals:</td>
-                <td>{{settings.decimals == '' ? '<em class="empty">none</em>' : settings.decimals}}</td>
+                <td>{{(settings.decimals == '' ? '<em class="empty">none</em>' : settings.decimals)|raw}}</td>
             </tr>
         </table>
 
@@ -134,7 +134,7 @@
         <table class="mini-table">
             <tr>
                 <td>Config File:</td>
-                <td>{{settings.configFile == '' ? '<em class="empty">none</em>' : settings.configFile}}</td>
+                <td>{{(settings.configFile == '' ? '<em class="empty">none</em>' : settings.configFile)|raw}}</td>
             </tr>
             {% if settings.cleanupHtml is defined %}
             <tr>
@@ -222,11 +222,11 @@
             </tr>
             <tr>
                 <td>Limit:</td>
-                <td>{{settings.limit ? settings.limit : '<em class="empty">none</em>'}}</td>
+                <td>{{(settings.limit ? settings.limit : '<em class="empty">none</em>')|raw}}</td>
             </tr>
             <tr>
                 <td>Selection Label:</td>
-                <td>{{settings.selectionLabel ? settings.selectionLabel : '<em class="empty">none</em>'}}</td>
+                <td>{{(settings.selectionLabel ? settings.selectionLabel : '<em class="empty">none</em>')|raw}}</td>
             </tr>
         </table>
 
@@ -238,19 +238,19 @@
         <table class="mini-table">
             <tr>
                 <td>placeholder:</td>
-                <td>{{settings.placeholder ? settings.placeholder : '<em class="empty">none</em>'}}</td>
+                <td>{{(settings.placeholder ? settings.placeholder : '<em class="empty">none</em>')|raw}}</td>
             </tr>
             <tr>
                 <td>maxLength:</td>
-                <td>{{settings.maxLength ? settings.maxLength : '<em class="empty">none</em>'}}</td>
+                <td>{{(settings.maxLength ? settings.maxLength : '<em class="empty">none</em>')|raw}}</td>
             </tr>
             <tr>
                 <td>multiline:</td>
-                <td>{{settings.multiline ? settings.multiline : '<em class="empty">none</em>'}}</td>
+                <td>{{(settings.multiline ? settings.multiline : '<em class="empty">none</em>')|raw}}</td>
             </tr>
             <tr>
                 <td>initialRows:</td>
-                <td>{{settings.initialRows ? settings.initialRows : '<em class="empty">none</em>'}}</td>
+                <td>{{(settings.initialRows ? settings.initialRows : '<em class="empty">none</em>')|raw}}</td>
             </tr>
         </table>
 
@@ -263,11 +263,11 @@
             </tr>
             <tr>
                 <td>limit:</td>
-                <td>{{settings.limit ? settings.limit : '<em class="empty">none</em>'}}</td>
+                <td>{{(settings.limit ? settings.limit : '<em class="empty">none</em>')|raw}}</td>
             </tr>
             <tr>
                 <td>Selection Label:</td>
-                <td>{{settings.selectionLabel ? settings.selectionLabel : '<em class="empty">none</em>'}}</td>
+                <td>{{(settings.selectionLabel ? settings.selectionLabel : '<em class="empty">none</em>')|raw}}</td>
             </tr>
         </table>
 
@@ -306,7 +306,7 @@
                 </tr>
                 <tr>
                     <td>Location Subpath:</td>
-                    <td>{{settings.singleUploadLocationSubpath ? settings.singleUploadLocationSubpath : '<em class="empty">none</em>'}}</td>
+                    <td>{{(settings.singleUploadLocationSubpath ? settings.singleUploadLocationSubpath : '<em class="empty">none</em>')|raw}}</td>
                 </tr>
             {% else %}
                 <tr>
@@ -320,7 +320,7 @@
                 </tr>
                 <tr>
                     <td>Default Location Subpath:</td>
-                    <td>{{settings.defaultUploadLocationSubpath ? settings.defaultUploadLocationSubpath : '<em class="empty">none</em>'}}</td>
+                    <td>{{(settings.defaultUploadLocationSubpath ? settings.defaultUploadLocationSubpath : '<em class="empty">none</em>')|raw}}</td>
                 </tr>
             {% endif %}
             <tr>
@@ -338,11 +338,11 @@
             </tr>
             <tr>
                 <td>limit:</td>
-                <td>{{settings.limit ? settings.limit : '<em class="empty">none</em>'}}</td>
+                <td>{{(settings.limit ? settings.limit : '<em class="empty">none</em>')|raw}}</td>
             </tr>
             <tr>
                 <td>Selection Label:</td>
-                <td>{{settings.selectionLabel ? settings.selectionLabel : '<em class="empty">none</em>'}}</td>
+                <td>{{(settings.selectionLabel ? settings.selectionLabel : '<em class="empty">none</em>')|raw}}</td>
             </tr>
         </table>
 
